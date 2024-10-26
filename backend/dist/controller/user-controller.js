@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 import { hash, compare } from "bcrypt";
+import { createToken } from "../utils/token-manager.js";
 export const login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
@@ -10,6 +11,8 @@ export const login = async (req, res, next) => {
         const isPasswordCorrect = await compare(password, user.password);
         if (!isPasswordCorrect)
             return res.status(403).json({ message: " Invalid User Credentials" });
+        //create the token.
+        const token = createToken(user._id.toString(), email, "7d");
         return res.status(200).json({ message: "login successful" });
     }
     catch (err) {

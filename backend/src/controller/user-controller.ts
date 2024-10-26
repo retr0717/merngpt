@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import User from "../models/User.js";
 import { hash, compare } from "bcrypt";
+import { createToken } from "../utils/token-manager.js";
 
 export const login = async (req:Request, res:Response, next:NextFunction) => {
   try{
@@ -11,6 +12,9 @@ export const login = async (req:Request, res:Response, next:NextFunction) => {
 
     const isPasswordCorrect = await compare(password, user.password);
     if(!isPasswordCorrect) return res.status(403).json({message : " Invalid User Credentials"});
+
+    //create the token.
+    const token = createToken(user._id.toString(), email, "7d");
 
     return res.status(200).json({message : "login successful"});
   }catch(err){
