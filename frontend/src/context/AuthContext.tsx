@@ -1,5 +1,5 @@
 import { createContext,ReactNode, useContext, useEffect, useState } from "react";
-import { loginUser } from "../helpers/apiCalls.js";
+import { checkAuthStatus, loginUser } from "../helpers/apiCalls.js";
 
 type User = {
     name: string;
@@ -22,6 +22,16 @@ export const AuthProvider = ({children} : {children : ReactNode}) => {
 
     useEffect(() => {
         //check for cookie to skip login.
+        const checkStatus = async () => {
+            const data = await checkAuthStatus();
+            if(data)
+            {
+                setUser({email: data.email, name: data.name});
+                setIsLoggedIn(true);
+            }
+        }
+
+        checkStatus();
     },[]);
 
     const login = async(email:string, password: string) => {

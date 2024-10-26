@@ -4,11 +4,28 @@ import { hash, compare } from "bcrypt";
 import { createToken } from "../utils/token-manager.js";
 import { constants } from "../utils/constant.js";
 
+export const verifyUser = async (req:Request, res:Response, next:NextFunction) => {
+  try{
+
+    const user = await User.findById(res.locals.jwtData.id);
+
+    if(!user) return res.status(401).json({message : "User Not Found!"});
+    if(user._id.toString() !== res.locals.jwtData.id) return res.status(401).send("Permission Denied!");
+
+    return res.status(200).json({message : "OK", name: user.name, email: user.email});
+
+  }catch(err){
+    console.log("loginvalidator ", err);
+    return res.status(200).json({message : "ERROR", err})
+  }
+}
+
 export const login = async (req:Request, res:Response, next:NextFunction) => {
   try{
+
+    console.log(req.body)
     const {email, password} = req.body;
     const user = await User.findOne({email});
-    console.log(user);
     if(!user) return res.status(401).json({message : "Invalid user"});
 
     const isPasswordCorrect = await compare(password, user.password);
@@ -36,7 +53,7 @@ export const login = async (req:Request, res:Response, next:NextFunction) => {
       signed: true
     });
 
-    return res.status(200).json({message : "login successful"});
+    return res.status(200).json({message : "OK", name: user.name, email: user.email});
 
   }catch(err){
     console.log("loginvalidator ", err);
