@@ -15,7 +15,7 @@ export const deleteChats = async (req:Request, res:Response, next:NextFunction) 
       //@ts-ignore
       user.chats = [];
       await user.save();
-      return res.status(200).json({message : "OK", chats: user.chats});
+      return res.status(200).json({message : "OK"});
   
     }catch(err){
       console.log("loginvalidator ", err);

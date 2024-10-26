@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { red } from '@mui/material/colors';
 import toast from 'react-hot-toast';
-import { getUserChats, sendChatRequest } from '../helpers/apiCalls';
+import { deleteChats, getUserChats, sendChatRequest } from '../helpers/apiCalls';
 import {ChatItem} from '../components/chat/ChatItem'
 
 type Message = {
@@ -35,7 +35,7 @@ const Chat = () => {
     const handleDeleteChats = async () => {
       try {
         toast.loading("Deleting Chats", { id: "deletechats" });
-        //await deleteUserChats();
+        await deleteChats();
         setChatMessages([]);
         toast.success("Deleted Chats Successfully", { id: "deletechats" });
       } catch (error) {
@@ -114,7 +114,7 @@ const Chat = () => {
               Education, etc. But avoid sharing personal information
             </Typography>
             <Button
-              // onClick={handleDeleteChats}
+              onClick={handleDeleteChats}
               sx={{
                 width: "200px",
                 my: "auto",

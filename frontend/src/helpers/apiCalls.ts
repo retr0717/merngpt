@@ -1,5 +1,19 @@
 import axios from 'axios';
 
+export const deleteChats = async () => {
+    const res = await axios.delete('/chat/delete');
+
+    console.log(await res.data);
+
+    if(res.status !== 200)
+    {
+        throw new Error('Delete Chat Unsuccessful');
+    }
+
+    const data = await  res.data;
+    return data;    
+}
+
 export const getUserChats = async () => {
     const res = await axios.get('/chat/all-chats',);
     console.log(await res.data);
