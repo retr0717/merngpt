@@ -6,6 +6,7 @@ import SignUp from "./pages/SignUp"
 import Chat from "./pages/Chat"
 import { NotFound } from "./pages/NotFound"
 import { useAuth } from "./context/AuthContext"
+import './App.css';
 
 function App() {
 

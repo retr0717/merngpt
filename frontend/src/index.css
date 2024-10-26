@@ -1,15 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
-html,body{
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;600;800&family=Work+Sans&display=swap");
+
+html,
+body {
   margin: 0;
   padding: 0;
-  background-color: rgb(23, 24, 37);
-  font-family: 'Roboto Slab', 'serif';
+  background: #05101c;
   color: white;
+  font-family: "Roboto Slab", serif;
 }
 
-.nav-link{
+.image-inverted {
+  filter: invert(100%);
+}
+.nav-link {
   font-weight: 600;
   text-transform: uppercase;
   margin-right: 10px;
@@ -19,7 +25,20 @@ html,body{
   text-decoration: none;
   letter-spacing: 1px;
 }
+.MuiOutlinedInput-input-root.Mui-focused,
+.MuiOutlinedInput-notchedOutline {
+  border-color: white !important;
+}
 
-.image-inverted {
-  filter: invert(100%);
+.rotate {
+  animation: rotation 8s infinite linear;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
 }
