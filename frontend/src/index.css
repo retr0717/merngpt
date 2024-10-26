@@ -6,4 +6,9 @@ html,body{
   padding: 0;
   background-color: rgb(23, 24, 37);
   font-family: 'Roboto Slab', 'serif';
+  color: white;
+}
+
+.image-inverted {
+  filter: invert(100%);
 }
