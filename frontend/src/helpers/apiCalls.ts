@@ -1,5 +1,19 @@
 import axios from 'axios';
 
+export const userLogout = async () => {
+    const res = await axios.get('/user/logout');
+
+    console.log(await res.data);
+
+    if(res.status !== 200)
+    {
+        throw new Error('Logout Unsuccessful');
+    }
+
+    const data = await  res.data;
+    return data;    
+}
+
 export const deleteChats = async () => {
     const res = await axios.delete('/chat/delete');
 

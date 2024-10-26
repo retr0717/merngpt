@@ -4,6 +4,29 @@ import { hash, compare } from "bcrypt";
 import { createToken } from "../utils/token-manager.js";
 import { constants } from "../utils/constant.js";
 
+export const logout = async (req:Request, res:Response, next:NextFunction) => {
+  try{
+
+    const user = await User.findById(res.locals.jwtData.id);
+
+    if(!user) return res.status(401).json({message : "User Not Found!"});
+    if(user._id.toString() !== res.locals.jwtData.id) return res.status(401).send("Permission Denied!");
+
+     //clear the existing token.
+     res.clearCookie(constants.COOKIE_NAME,{
+      domain : process.env.DOMAIN,
+      httpOnly: true,
+      signed: true
+    });
+
+    return res.status(200).json({message : "OK"});
+
+  }catch(err){
+    console.log("loginvalidator ", err);
+    return res.status(200).json({message : "ERROR", err})
+  }
+}
+
 export const verifyUser = async (req:Request, res:Response, next:NextFunction) => {
   try{
 
