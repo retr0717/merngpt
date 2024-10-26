@@ -2,6 +2,23 @@ import { NextFunction, Request, Response } from "express";
 import User from "../models/User.js";
 import { hash, compare } from "bcrypt";
 
+export const login = async (req:Request, res:Response, next:NextFunction) => {
+  try{
+    const {email, password} = req.body;
+    const user = await User.findOne({email});
+    console.log(user);
+    if(!user) return res.status(401).json({message : "Invalid user"});
+
+    const isPasswordCorrect = await compare(password, user.password);
+    if(!isPasswordCorrect) return res.status(403).json({message : " Invalid User Credentials"});
+
+    return res.status(200).json({message : "login successful"});
+  }catch(err){
+    console.log("loginvalidator ", err);
+    return res.status(200).json({message : "ERROR", err})
+  }
+}
+
 export const getAllUsers = async (
   req: Request,
   res: Response,
