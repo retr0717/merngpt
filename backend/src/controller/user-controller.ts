@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import User from "../models/User.js";
 import { hash, compare } from "bcrypt";
 import { createToken } from "../utils/token-manager.js";
+import { constants } from "../utils/constant.js";
 
 export const login = async (req:Request, res:Response, next:NextFunction) => {
   try{
@@ -13,10 +14,30 @@ export const login = async (req:Request, res:Response, next:NextFunction) => {
     const isPasswordCorrect = await compare(password, user.password);
     if(!isPasswordCorrect) return res.status(403).json({message : " Invalid User Credentials"});
 
+    //clear the existing token.
+    res.clearCookie(constants.COOKIE_NAME,{
+      domain : process.env.DOMAIN,
+      httpOnly: true,
+      signed: true
+    });
+
     //create the token.
     const token = createToken(user._id.toString(), email, "7d");
 
+    //cookie creation.
+    const expires = new Date();
+    expires.setDate(expires.getDate() + 7);
+
+    res.cookie(constants.COOKIE_NAME, token , {
+      path : "/",
+      domain : process.env.DOMAIN,
+      expires,
+      httpOnly: true,
+      signed: true
+    });
+
     return res.status(200).json({message : "login successful"});
+
   }catch(err){
     console.log("loginvalidator ", err);
     return res.status(200).json({message : "ERROR", err})
@@ -54,27 +75,32 @@ export const userSignup = async (
     const user = new User({ name, email, password: hashedPassword });
     await user.save();
 
-    // // create token and store cookie
-    // res.clearCookie(COOKIE_NAME, {
-    //   httpOnly: true,
-    //   domain: "localhost",
-    //   signed: true,
-    //   path: "/",
-    // });
-    // const token = createToken(user._id.toString(), user.email, "7d");
+    //clear the existing token.
+    res.clearCookie(constants.COOKIE_NAME,{
+      domain : process.env.DOMAIN,
+      httpOnly: true,
+      signed: true
+    });
+
+    //create the token.
+    const token = createToken(user._id.toString(), email, "7d");
+
+    //cookie creation.
     const expires = new Date();
     expires.setDate(expires.getDate() + 7);
-    // res.cookie(COOKIE_NAME, token, {
-    //   path: "/",
-    //   domain: "localhost",
-    //   expires,
-    //   httpOnly: true,
-    //   signed: true,
-    // });
-    //
+
+    res.cookie(constants.COOKIE_NAME, token , {
+      path : "/",
+      domain : process.env.DOMAIN,
+      expires,
+      httpOnly: true,
+      signed: true
+    });
+
     return res
       .status(201)
-      .json({ message: "OK", name: user.name, email: user.email, });
+      .json({ message: "OK", name: user.name, email: user.email});
+
   } catch (error) {
     console.log(error);
     return res.status(200).json({ message: "ERROR", cause: error.message });

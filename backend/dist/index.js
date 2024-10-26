@@ -2,7 +2,7 @@ import app from "./app.js";
 import { connectDB } from "./db/connection.js";
 connectDB()
     .then(() => {
-    app.listen(4000, () => {
+    app.listen(process.env.PORT || 4000, () => {
         console.log("Server started on http://localhost:4000");
     });
 })
