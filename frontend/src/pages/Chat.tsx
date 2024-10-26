@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { red } from '@mui/material/colors';
 import toast from 'react-hot-toast';
-import { sendChatRequest } from '../helpers/apiCalls';
+import { getUserChats, sendChatRequest } from '../helpers/apiCalls';
+import {ChatItem} from '../components/chat/ChatItem'
 
 type Message = {
     role: "user" | "assistant";
@@ -43,20 +44,20 @@ const Chat = () => {
       }
     };
     
-    // useLayoutEffect(() => {
-    //   if (auth?.isLoggedIn && auth.user) {
-    //     toast.loading("Loading Chats", { id: "loadchats" });
-    //     getUserChats()
-    //       .then((data) => {
-    //         setChatMessages([...data.chats]);
-    //         toast.success("Successfully loaded chats", { id: "loadchats" });
-    //       })
-    //       .catch((err) => {
-    //         console.log(err);
-    //         toast.error("Loading Failed", { id: "loadchats" });
-    //       });
-    //   }
-    // }, [auth]); 
+    useLayoutEffect(() => {
+      if (auth?.isLoggedIn && auth.user) {
+        toast.loading("Loading Chats", { id: "loadchats" });
+        getUserChats()
+          .then((data) => {
+            setChatMessages([...data.chats]);
+            toast.success("Successfully loaded chats", { id: "loadchats" });
+          })
+          .catch((err) => {
+            console.log(err);
+            toast.error("Loading Failed", { id: "loadchats" });
+          });
+      }
+    }, [auth]); 
 
     useEffect(() => {
       if (!auth?.user) {

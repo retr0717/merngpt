@@ -1,5 +1,18 @@
 import axios from 'axios';
 
+export const getUserChats = async () => {
+    const res = await axios.get('/chat/all-chats',);
+    console.log(await res.data);
+
+    if(res.status !== 200)
+    {
+        throw new Error('Get All Chat Unsuccessful');
+    }
+
+    const data = await  res.data;
+    return data;    
+}
+
 export const sendChatRequest = async (message : string) => {
     const res = await axios.post('/chat/new', { message });
     console.log(await res.data);
